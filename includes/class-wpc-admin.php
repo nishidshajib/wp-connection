@@ -48,7 +48,7 @@ class WPC_Admin {
 
 	public static function assets( $hook ) {
 		if ( 'tools_page_' . self::SLUG === $hook ) {
-			wp_enqueue_style( 'wpc-admin', WPC_URL . 'assets/admin.css', array(), WPC_VERSION );
+			wp_enqueue_style( 'wpc-admin', WPC_URL . 'assets/admin.css', array(), WPC_VERSION . '.' . filemtime( WPC_DIR . '/assets/admin.css' ) );
 		}
 	}
 

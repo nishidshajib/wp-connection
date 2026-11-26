@@ -19,8 +19,8 @@ class WPC_Deactivate {
 		if ( 'plugins.php' !== $hook ) {
 			return;
 		}
-		wp_enqueue_style( 'wpc-deactivate', WPC_URL . 'assets/deactivate.css', array(), WPC_VERSION );
-		wp_enqueue_script( 'wpc-deactivate', WPC_URL . 'assets/deactivate.js', array(), WPC_VERSION, true );
+		wp_enqueue_style( 'wpc-deactivate', WPC_URL . 'assets/deactivate.css', array(), WPC_VERSION . '.' . filemtime( WPC_DIR . '/assets/deactivate.css' ) );
+		wp_enqueue_script( 'wpc-deactivate', WPC_URL . 'assets/deactivate.js', array(), WPC_VERSION . '.' . filemtime( WPC_DIR . '/assets/deactivate.js' ), true );
 		wp_localize_script( 'wpc-deactivate', 'wpcDeactivate', array( 'basename' => plugin_basename( WPC_FILE ) ) );
 	}
 
