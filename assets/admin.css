@@ -1,4 +1,4 @@
-.wpc{max-width:none}
+.wrap.wpc{max-width:1180px;margin-left:auto;margin-right:auto;padding:0 20px;box-sizing:border-box}
 .wpc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:8px 0 12px}
 .wpc-head h1{padding:0;margin:0 0 4px}
 .wpc-head h2{margin:0}
@@ -63,7 +63,7 @@
 .wpc-update{border-color:var(--wpc-brand);box-shadow:inset 4px 0 0 var(--wpc-brand)}
 .wpc-notes p{margin:4px 0}
 /* Welcome */
-.wpc-welcome{max-width:1180px}
+.wrap.wpc-welcome{max-width:1180px}
 .wpc-welcome h1{font-size:28px;font-weight:600;margin:8px 0 6px;padding:0}
 .wpc-lead{font-size:15px;max-width:640px;margin:0 0 20px}
 .wpc-progress{list-style:none;margin:16px 0 20px;padding:0;display:flex;flex-wrap:wrap;gap:8px 24px}
