@@ -11,7 +11,7 @@
  *
  * Public clients only (no client secret), PKCE required, codes are single-use and
  * expire after 10 minutes. Redirect URIs must be on an allowed host or loopback.
- * The access token is a normal WP Connections token, so it shows on the Access
+ * The access token is a normal WP Connection token, so it shows on the Access
  * tab, can be revoked there and follows the same domain, expiry and rate rules.
  */
 
@@ -106,7 +106,7 @@ class WPC_OAuth {
 			'resource'                 => self::resource(),
 			'authorization_servers'    => array( self::issuer() ),
 			'bearer_methods_supported' => array( 'header' ),
-			'resource_name'            => get_bloginfo( 'name' ) . ' (WP Connections)',
+			'resource_name'            => get_bloginfo( 'name' ) . ' (WP Connection)',
 		);
 	}
 
@@ -144,7 +144,7 @@ class WPC_OAuth {
 		$p['redirect_uri'] = isset( $_REQUEST['redirect_uri'] ) ? trim( wp_unslash( $_REQUEST['redirect_uri'] ) ) : ''; // phpcs:ignore
 
 		if ( ! self::enabled() ) {
-			self::page( 'Sign-in is switched off', '<p>OAuth sign-in is not enabled for WP Connections on this site.</p>' );
+			self::page( 'Sign-in is switched off', '<p>OAuth sign-in is not enabled for WP Connection on this site.</p>' );
 		}
 		$clients = self::clients();
 		$client  = $clients[ $p['client_id'] ] ?? null;
@@ -196,7 +196,7 @@ class WPC_OAuth {
 		$host = wp_parse_url( $p['redirect_uri'], PHP_URL_HOST );
 		ob_start();
 		?>
-		<p><strong><?php echo esc_html( $client['name'] ); ?></strong> wants to connect to <strong><?php echo esc_html( get_bloginfo( 'name' ) ); ?></strong> through WP Connections and act as <strong><?php echo esc_html( wp_get_current_user()->user_login ); ?></strong>.</p>
+		<p><strong><?php echo esc_html( $client['name'] ); ?></strong> wants to connect to <strong><?php echo esc_html( get_bloginfo( 'name' ) ); ?></strong> through WP Connection and act as <strong><?php echo esc_html( wp_get_current_user()->user_login ); ?></strong>.</p>
 		<p class="muted">The app named itself. After approval you return to <strong><?php echo esc_html( $host ); ?></strong>. Only approve if you started this connection.</p>
 		<form method="post">
 			<?php wp_nonce_field( $nonce_action ); ?>
@@ -204,7 +204,7 @@ class WPC_OAuth {
 			<label>Access expires<select name="days"><option value="30">After 30 days</option><option value="7">After 7 days</option><option value="90">After 90 days</option><option value="0">Never</option></select></label>
 			<div class="btns"><button class="primary" name="approve" value="1">Approve</button><button name="deny" value="1">Deny</button></div>
 		</form>
-		<p class="muted">You can revoke this access at any time on Tools → WP Connections → Access.</p>
+		<p class="muted">You can revoke this access at any time on Tools → WP Connection → Access.</p>
 		<?php
 		self::page( 'Connect an AI app', ob_get_clean() );
 	}
@@ -230,7 +230,7 @@ class WPC_OAuth {
 		header( "Content-Security-Policy: frame-ancestors 'none'" );
 		header( 'Content-Type: text/html; charset=utf-8' );
 		?>
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title><?php echo esc_html( $title ); ?> · WP Connections</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title><?php echo esc_html( $title ); ?> · WP Connection</title>
 <style>
 body{margin:0;background:#f0f0f1;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#1d2327}
 main{max-width:460px;margin:8vh auto;background:#fff;border:1px solid #c3c4c7;border-radius:8px;padding:28px 32px;box-sizing:border-box}
@@ -243,7 +243,7 @@ button{font:inherit;min-height:44px;padding:0 20px;border-radius:4px;border:1px 
 button.primary{background:#3E00C7;color:#fff}
 button:focus-visible,select:focus-visible{outline:2px solid #3E00C7;outline-offset:2px}
 .brand{font-weight:700;color:#3E00C7;font-size:13px;letter-spacing:.02em;margin-bottom:8px}
-</style></head><body><main><div class="brand">WP Connections</div><h1><?php echo esc_html( $title ); ?></h1><?php echo $body; // phpcs:ignore -- built from escaped parts above. ?></main></body></html>
+</style></head><body><main><div class="brand">WP Connection</div><h1><?php echo esc_html( $title ); ?></h1><?php echo $body; // phpcs:ignore -- built from escaped parts above. ?></main></body></html>
 		<?php
 		exit;
 	}
@@ -283,7 +283,7 @@ button:focus-visible,select:focus-visible{outline:2px solid #3E00C7;outline-offs
 			if ( strlen( $u ) > 500 || ! self::redirect_ok( $u ) ) {
 				$h = wp_parse_url( $u, PHP_URL_HOST );
 				WPC_Log::add( 'oauth-register', (string) $h, false, 'Redirect host not allowed' );
-				return self::oauth_error( 'invalid_redirect_uri', 'Redirect host "' . $h . '" is not allowed. An administrator can add it on Tools → WP Connections → Access → Allowed redirect hosts.' );
+				return self::oauth_error( 'invalid_redirect_uri', 'Redirect host "' . $h . '" is not allowed. An administrator can add it on Tools → WP Connection → Access → Allowed redirect hosts.' );
 			}
 		}
 		$clients = self::clients();
@@ -313,7 +313,7 @@ button:focus-visible,select:focus-visible{outline:2px solid #3E00C7;outline-offs
 		return $r;
 	}
 
-	/** Authorization code + PKCE → WP Connections access token. */
+	/** Authorization code + PKCE → WP Connection access token. */
 	public static function token( WP_REST_Request $req ) {
 		if ( ! self::enabled() ) {
 			return self::oauth_error( 'access_denied', 'OAuth sign-in is switched off.', 403 );

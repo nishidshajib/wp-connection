@@ -1,13 +1,13 @@
 <?php
 /**
- * Tools → WP Connections admin screen.
+ * Tools → WP Connection admin screen.
  */
 
 defined( 'ABSPATH' ) || exit;
 
 class WPC_Admin {
 
-	const SLUG = 'wp-connections';
+	const SLUG = 'wp-connection';
 
 	/** Boolean settings per tab (unchecked boxes are not posted). */
 	const BOOLS = array(
@@ -43,7 +43,7 @@ class WPC_Admin {
 	}
 
 	public static function menu() {
-		add_management_page( 'WP Connections', 'WP Connections', 'manage_options', self::SLUG, array( __CLASS__, 'page' ) );
+		add_management_page( 'WP Connection', 'WP Connection', 'manage_options', self::SLUG, array( __CLASS__, 'page' ) );
 	}
 
 	public static function assets( $hook ) {
@@ -57,11 +57,11 @@ class WPC_Admin {
 			return;
 		}
 		if ( WPC_Guard::is_blocked() ) {
-			echo '<div class="notice notice-error"><p><strong>WP Connections is disabled on this domain</strong> (it is in the blocked list). Deactivate and delete the plugin here.</p></div>';
+			echo '<div class="notice notice-error"><p><strong>WP Connection is disabled on this domain</strong> (it is in the blocked list). Deactivate and delete the plugin here.</p></div>';
 		} elseif ( ! function_exists( 'wp_register_ability' ) ) {
-			echo '<div class="notice notice-error"><p><strong>WP Connections</strong> needs WordPress 6.9 or newer.</p></div>';
+			echo '<div class="notice notice-error"><p><strong>WP Connection</strong> needs WordPress 6.9 or newer.</p></div>';
 		} elseif ( ! class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
-			echo '<div class="notice notice-warning"><p><strong>WP Connections</strong> needs the <strong>MCP Adapter</strong> plugin to be active.</p></div>';
+			echo '<div class="notice notice-warning"><p><strong>WP Connection</strong> needs the <strong>MCP Adapter</strong> plugin to be active.</p></div>';
 		}
 	}
 
@@ -270,7 +270,7 @@ class WPC_Admin {
 		$rows = WPC_Log::query( array( 'limit' => 5000 ) );
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="wp-connections-log-' . gmdate( 'Ymd-His' ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="wp-connection-log-' . gmdate( 'Ymd-His' ) . '.csv"' );
 		$out = fopen( 'php://output', 'w' );
 		fputcsv( $out, array( 'id', 'created_utc', 'token', 'tool', 'target', 'ok', 'write', 'message' ) );
 		foreach ( $rows as $r ) {
@@ -317,7 +317,7 @@ class WPC_Admin {
 			'restore_failed' => array( 'error', 'Restore failed. See the activity log.' ),
 			'test_ok'        => array( 'success', 'Connection test passed: the MCP server answered.' ),
 			'test_failed'    => array( 'error', 'Connection test failed. Check that the MCP Adapter is active.' ),
-			'reset'          => array( 'success', 'All WP Connections data was removed and default settings restored.' ),
+			'reset'          => array( 'success', 'All WP Connection data was removed and default settings restored.' ),
 			'checked'        => array( 'success', 'Checked for updates.' ),
 		);
 		$m = isset( $_GET['wpc_msg'] ) ? sanitize_key( $_GET['wpc_msg'] ) : ''; // phpcs:ignore
@@ -325,7 +325,7 @@ class WPC_Admin {
 		<div class="wrap wpc">
 			<div class="wpc-head">
 				<div>
-					<h1>WP Connections</h1>
+					<h1>WP Connection</h1>
 					<span class="wpc-muted">Version <?php echo esc_html( WPC_VERSION ); ?><?php $up = self::update_available(); if ( $up ) { echo ' · <a href="' . esc_url( self::url( 'updates' ) ) . '">Version ' . esc_html( $up ) . ' available</a>'; } ?> · Connects this staging site to your AI assistant through the WordPress MCP Adapter</span>
 				</div>
 				<div class="wpc-head-right">
@@ -347,13 +347,13 @@ class WPC_Admin {
 				<div class="notice notice-<?php echo esc_attr( $msgs[ $m ][0] ); ?> is-dismissible"><p><?php echo esc_html( $msgs[ $m ][1] ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( WPC_Guard::is_blocked() ) : ?>
-				<div class="notice notice-error inline"><p>This domain is in the production block list, so every tool is disabled and tokens do not work. Deactivate and delete WP Connections on this site.</p></div>
+				<div class="notice notice-error inline"><p>This domain is in the production block list, so every tool is disabled and tokens do not work. Deactivate and delete WP Connection on this site.</p></div>
 				</div>
 				<?php
 				return;
 			endif;
 			?>
-			<nav class="nav-tab-wrapper wpc-tabs" aria-label="WP Connections sections">
+			<nav class="nav-tab-wrapper wpc-tabs" aria-label="WP Connection sections">
 				<?php foreach ( $tabs as $k => $label ) : ?>
 					<a href="<?php echo esc_url( self::url( $k ) ); ?>" class="nav-tab <?php echo $tab === $k ? 'nav-tab-active' : ''; ?>" <?php echo $tab === $k ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?></a>
 				<?php endforeach; ?>
@@ -482,7 +482,7 @@ class WPC_Admin {
 		<section class="wpc-card">
 			<h2>Extra restrictions</h2>
 				<?php
-				self::row( 'Only allow MCP requests', 'Tokens are only accepted on the WP Connections MCP route, never on other REST routes or wp-admin.', self::tag( 'Always on', 'ok' ) );
+				self::row( 'Only allow MCP requests', 'Tokens are only accepted on the WP Connection MCP route, never on other REST routes or wp-admin.', self::tag( 'Always on', 'ok' ) );
 				self::row( 'Rate limit', 'Maximum tool calls per minute per token (0 = no limit).', '<input type="number" min="0" name="rate_limit" value="' . (int) $s['rate_limit'] . '" class="small-text" aria-label="Calls per minute">' );
 				self::row( 'IP allowlist (optional)', 'One IP or CIDR range per line. Leave empty for cloud-hosted AI apps, whose addresses can change. Useful for desktop tools on a fixed office IP.', '<textarea name="ip_allowlist" rows="3" cols="30" aria-label="IP allowlist" placeholder="203.0.113.0/24">' . esc_textarea( $s['ip_allowlist'] ) . '</textarea>' );
 				?>
@@ -597,17 +597,17 @@ class WPC_Admin {
 		<section class="wpc-card">
 			<h2>Protected settings</h2>
 			<span class="wpc-muted">The AI can read these but never change them.</span>
-			<div><?php foreach ( array( 'Site address (URL)', 'WordPress address', 'Admin email', 'User registration', 'Default role', 'User roles', 'Active plugins list', 'Security keys', 'WP Connections settings' ) as $c ) { echo '<span class="wpc-chip">' . esc_html( $c ) . '</span>'; } ?></div>
-			<?php self::row( 'Self-protection', 'No AI app can deactivate WP Connections or the MCP Adapter, or manage users.', self::tag( 'Always on', 'ok' ) ); ?>
+			<div><?php foreach ( array( 'Site address (URL)', 'WordPress address', 'Admin email', 'User registration', 'Default role', 'User roles', 'Active plugins list', 'Security keys', 'WP Connection settings' ) as $c ) { echo '<span class="wpc-chip">' . esc_html( $c ) . '</span>'; } ?></div>
+			<?php self::row( 'Self-protection', 'No AI app can deactivate WP Connection or the MCP Adapter, or manage users.', self::tag( 'Always on', 'ok' ) ); ?>
 		</section>
 		<section class="wpc-card wpc-dangerzone">
 			<h2>Danger zone</h2>
 			<div class="wpc-btns">
 				<?php self::form_open( 'safety', 'revoke_all', 'wpc-inline' ); ?><button class="button wpc-danger" onclick="return confirm('Revoke all tokens? Every connected AI app will be disconnected.')">Revoke all tokens</button></form>
 				<?php self::form_open( 'safety', 'clear_log', 'wpc-inline' ); ?><button class="button wpc-danger" onclick="return confirm('Clear the activity log?')">Clear activity log</button></form>
-				<?php self::form_open( 'safety', 'remove_data', 'wpc-inline' ); ?><button class="button wpc-danger" onclick="return confirm('Delete WP Connections tables, tokens and settings, then restore defaults? Other plugins are not touched.')">Reset WP Connections data</button></form>
+				<?php self::form_open( 'safety', 'remove_data', 'wpc-inline' ); ?><button class="button wpc-danger" onclick="return confirm('Delete WP Connection tables, tokens and settings, then restore defaults? Other plugins are not touched.')">Reset WP Connection data</button></form>
 			</div>
-			<span class="wpc-muted">Before launch: deactivate and delete WP Connections and the MCP Adapter so they never reach the production site.</span>
+			<span class="wpc-muted">Before launch: deactivate and delete WP Connection and the MCP Adapter so they never reach the production site.</span>
 		</section>
 		<?php
 	}
@@ -735,9 +735,9 @@ class WPC_Admin {
 		<section class="wpc-card">
 			<h2>Where updates come from</h2>
 			<?php if ( $gh ) : ?>
-				<span class="wpc-muted">This copy was installed from GitHub, so it checks the repository’s releases twice a day. Each release needs a <code>wp-connections.zip</code> file attached. When GitHub publishes a SHA-256 checksum for it, the download is checked before installing.</span>
+				<span class="wpc-muted">This copy was installed from GitHub, so it checks the repository’s releases twice a day. Each release needs a <code>wp-connection.zip</code> file attached. When GitHub publishes a SHA-256 checksum for it, the download is checked before installing.</span>
 				<div class="wpc-fields">
-					<label><strong>GitHub repository</strong><input type="text" name="github_repo" value="<?php echo esc_attr( $s['github_repo'] ); ?>" placeholder="owner/wp-connections"></label>
+					<label><strong>GitHub repository</strong><input type="text" name="github_repo" value="<?php echo esc_attr( $s['github_repo'] ); ?>" placeholder="owner/wp-connection"></label>
 					<label><strong>Release channel</strong><select name="update_channel"><option value="stable" <?php selected( $s['update_channel'], 'stable' ); ?>>Stable releases only</option><option value="beta" <?php selected( $s['update_channel'], 'beta' ); ?>>Include pre-releases (beta)</option></select></label>
 					<label><strong>Access token (private repos only)</strong><input type="password" name="github_token" value="" autocomplete="off" placeholder="<?php echo $s['github_token'] ? 'Saved · type - to clear' : 'Leave empty for a public repo'; ?>"></label>
 				</div>
@@ -787,7 +787,7 @@ class WPC_Admin {
 				<li><span>2</span>Create access</li>
 				<li><span>3</span>Test connection</li>
 			</ol>
-			<h1>Welcome to WP Connections</h1>
+			<h1>Welcome to WP Connection</h1>
 			<p class="wpc-muted wpc-lead">Let an AI assistant build and edit this staging site through the WordPress MCP Adapter. Pick the app you’ll use. You can connect more apps later.</p>
 			<?php self::form_open( 'welcome', 'choose_client' ); ?>
 				<fieldset class="wpc-picks">

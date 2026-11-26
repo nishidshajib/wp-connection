@@ -1,16 +1,17 @@
 <?php
 /**
- * Plugin Name:       WP Connections
+ * Plugin Name:       WP Connection
  * Description:       Connects a staging WordPress site to AI assistants (Claude, ChatGPT, Cursor, VS Code and any MCP client) through the WordPress MCP Adapter, with API-key or OAuth access, per-tool permissions, sandboxed file access, staging protection and an activity log. Refuses to run on blocked (production) domains.
  * Version:           1.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.0
  * Requires Plugins:  mcp-adapter
  * Author:            Nishid Shajib
+ * Plugin URI:        https://wp-connection.com
  * Author URI:        https://nishidshajib.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       wp-connections
+ * Text Domain:       wp-connection
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,7 +22,7 @@ define( 'WPC_FILE', __FILE__ );
 define( 'WPC_DIR', __DIR__ );
 define( 'WPC_URL', plugin_dir_url( __FILE__ ) );
 // Default GitHub repository for updates (GitHub build only; editable on the Updates tab).
-define( 'WPC_GITHUB_REPO', 'nishidshajib/wp-connections' );
+define( 'WPC_GITHUB_REPO', 'nishidshajib/wp-connection' );
 // The WordPress.org build ships without the GitHub updater (see bin/build.sh).
 define( 'WPC_WPORG_BUILD', ! file_exists( __DIR__ . '/includes/class-wpc-updater.php' ) );
 

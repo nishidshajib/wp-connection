@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.1.0
+- Renamed to WP Connection (slug `wp-connection`, site wp-connection.com). The MCP URL is now `/wp-json/wp-connection/mcp`.
 - Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).
 - OAuth 2.1 sign-in (PKCE) for apps that can't send a custom header. `Authorization: Bearer` tokens accepted.
 - Updates tab. GitHub builds update from GitHub releases; WordPress.org builds update through WordPress.org.

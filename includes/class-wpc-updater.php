@@ -6,11 +6,11 @@
  * because WordPress.org plugins must update through WordPress.org (guideline 8).
  *
  * How a release reaches sites:
- * 1. Bump "Version" in wp-connections.php and WPC_VERSION, and "Stable tag" in readme.txt.
+ * 1. Bump "Version" in wp-connection.php and WPC_VERSION, and "Stable tag" in readme.txt.
  * 2. Run bin/build.sh, then create a GitHub release tagged v1.2.0 (or 1.2.0) and attach
- *    dist/wp-connections.zip (the GitHub build). Mark betas as pre-releases.
+ *    dist/wp-connection.zip (the GitHub build). Mark betas as pre-releases.
  * 3. Sites check twice a day; the update shows in Dashboard → Updates, on the Plugins
- *    page and on Tools → WP Connections → Updates, and can auto-update.
+ *    page and on Tools → WP Connection → Updates, and can auto-update.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -61,7 +61,7 @@ class WPC_Updater {
 				}
 				$asset = null;
 				foreach ( (array) ( $r['assets'] ?? array() ) as $a ) {
-					if ( 'wp-connections.zip' === ( $a['name'] ?? '' ) ) {
+					if ( 'wp-connection.zip' === ( $a['name'] ?? '' ) ) {
 						$asset = $a;
 						break;
 					}
@@ -109,7 +109,7 @@ class WPC_Updater {
 		}
 		$item = (object) array(
 			'id'          => 'github.com/' . self::repo(),
-			'slug'        => 'wp-connections',
+			'slug'        => 'wp-connection',
 			'plugin'      => self::basename(),
 			'new_version' => $r['version'],
 			'url'         => $r['url'],
@@ -127,7 +127,7 @@ class WPC_Updater {
 
 	/** "View version x details" popup on the Plugins page. */
 	public static function info( $result, $action, $args ) {
-		if ( 'plugin_information' !== $action || 'wp-connections' !== ( $args->slug ?? '' ) ) {
+		if ( 'plugin_information' !== $action || 'wp-connection' !== ( $args->slug ?? '' ) ) {
 			return $result;
 		}
 		$r = self::latest();
@@ -139,11 +139,11 @@ class WPC_Updater {
 			$log .= '<h4>' . esc_html( $x['version'] ) . ( $x['prerelease'] ? ' (beta)' : '' ) . '</h4>' . wpautop( esc_html( $x['notes'] ) );
 		}
 		return (object) array(
-			'name'          => 'WP Connections',
-			'slug'          => 'wp-connections',
+			'name'          => 'WP Connection',
+			'slug'          => 'wp-connection',
 			'version'       => $r['version'],
 			'author'        => '<a href="https://nishidshajib.com">Nishid Shajib</a>',
-			'homepage'      => 'https://nishidshajib.com',
+			'homepage'      => 'https://wp-connection.com',
 			'requires'      => '6.9',
 			'requires_php'  => '8.0',
 			'last_updated'  => $r['date'],
@@ -205,7 +205,7 @@ class WPC_Updater {
 		return $args;
 	}
 
-	/** Make sure the unzipped folder is called wp-connections. */
+	/** Make sure the unzipped folder is called wp-connection. */
 	public static function fix_folder( $source, $remote_source, $upgrader, $extra = array() ) {
 		if ( ( $extra['plugin'] ?? '' ) !== self::basename() ) {
 			return $source;

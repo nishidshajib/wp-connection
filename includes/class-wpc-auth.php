@@ -35,7 +35,7 @@ class WPC_Auth {
 	}
 
 	public static function route_namespace() {
-		return 'wp-connections';
+		return 'wp-connection';
 	}
 
 	/** True if this request targets an MCP endpoint (ours or the adapter default). */

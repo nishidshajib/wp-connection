@@ -1,4 +1,4 @@
-=== WP Connections ===
+=== WP Connection ===
 Contributors: nishid
 Tags: mcp, ai, staging, connector, abilities
 Requires at least: 6.9
@@ -13,7 +13,7 @@ Connect a staging WordPress site to an AI assistant (Claude, ChatGPT, Cursor, VS
 
 == Description ==
 
-WP Connections turns a staging site into a safe MCP server for AI assistants.
+WP Connection turns a staging site into a safe MCP server for AI assistants.
 
 * Welcome screen: pick the AI app you use and get its exact setup steps.
 * Access by API key (x-api-key or Authorization: Bearer) or by OAuth sign-in for apps that only offer a sign-in button. Named tokens, expiry, read-only preset, rate limit, optional IP allowlist, bound to the site domain.
@@ -23,14 +23,14 @@ WP Connections turns a staging site into a safe MCP server for AI assistants.
 * Production guard: refuses to work on the domains in the block list.
 * Activity log with filters, CSV export and one-click restore.
 
-MCP server URL: https://YOUR-STAGING-DOMAIN/wp-json/wp-connections/mcp
+MCP server URL: https://YOUR-STAGING-DOMAIN/wp-json/wp-connection/mcp
 
-Made by [Nishid Shajib](https://nishidshajib.com).
+Learn more at [wp-connection.com](https://wp-connection.com). Made by [Nishid Shajib](https://nishidshajib.com).
 
 == Installation ==
 
-1. Install and activate the MCP Adapter plugin, then WP Connections.
-2. Go to Tools → WP Connections and pick your AI app on the Welcome screen.
+1. Install and activate the MCP Adapter plugin, then WP Connection.
+2. Go to Tools → WP Connection and pick your AI app on the Welcome screen.
 3. Follow the steps shown for that app, then click Test connection.
 
 == Frequently Asked Questions ==
@@ -52,6 +52,7 @@ Deactivate → choose "Deactivate temporarily" (keeps everything) or "Deactivate
 == Changelog ==
 
 = 1.1.0 =
+* Renamed to WP Connection (slug wp-connection). The MCP URL is now /wp-json/wp-connection/mcp.
 * New Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).
 * OAuth sign-in for apps that can't send a custom header. Bearer tokens accepted.
 * Updates tab. GitHub builds update from GitHub releases; WordPress.org builds update through WordPress.org.

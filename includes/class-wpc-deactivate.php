@@ -37,7 +37,7 @@ class WPC_Deactivate {
 					<?php wp_nonce_field( 'wpc_full_deactivate' ); ?>
 					<input type="hidden" name="action" value="wpc_full_deactivate">
 					<div class="wpc-dlg-head">
-						<h2 id="wpc-dlg-title">Deactivate WP Connections</h2>
+						<h2 id="wpc-dlg-title">Deactivate WP Connection</h2>
 						<button type="button" class="wpc-dlg-x" data-wpc-close aria-label="Close"><span aria-hidden="true">×</span></button>
 					</div>
 					<div class="wpc-dlg-body">
@@ -46,10 +46,10 @@ class WPC_Deactivate {
 							<span><strong>Deactivate temporarily</strong><span class="wpc-muted">Every connected AI app is disconnected straight away. Settings, tokens, file backups and the activity log are kept, so you can switch it back on later.</span></span>
 						</label>
 						<label class="wpc-opt"><input type="radio" name="mode" value="full">
-							<span><strong>Deactivate and delete this plugin’s tables</strong><span class="wpc-muted">Removes only the database tables and settings that WP Connections itself created, then deactivates it. Other plugins’ tables and data are never touched.</span></span>
+							<span><strong>Deactivate and delete this plugin’s tables</strong><span class="wpc-muted">Removes only the database tables and settings that WP Connection itself created, then deactivates it. Other plugins’ tables and data are never touched.</span></span>
 						</label>
 						<div class="wpc-dlg-warn" id="wpc-dlg-warn" hidden>
-							<strong>Only these WP Connections items will be permanently deleted:</strong>
+							<strong>Only these WP Connection items will be permanently deleted:</strong>
 							<ul>
 								<li>Database tables <code><?php echo esc_html( $t['log'] ); ?></code> and <code><?php echo esc_html( $t['backups'] ); ?></code></li>
 								<li>Its settings: <code>wpc_settings</code>, <code>wpc_tokens</code>, <code>wpc_db_version</code></li>
@@ -63,7 +63,7 @@ class WPC_Deactivate {
 					<div class="wpc-dlg-foot">
 						<button type="button" class="button" data-wpc-close>Cancel</button>
 						<a href="#" class="button button-primary" id="wpc-dlg-temp">Deactivate</a>
-						<button type="submit" class="button wpc-btn-danger" id="wpc-dlg-full" hidden disabled>Delete WP Connections tables and deactivate</button>
+						<button type="submit" class="button wpc-btn-danger" id="wpc-dlg-full" hidden disabled>Delete WP Connection tables and deactivate</button>
 					</div>
 				</form>
 			</div>

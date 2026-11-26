@@ -1,6 +1,6 @@
 <?php
 /**
- * The AI apps WP Connections can be set up for, with per-app setup steps.
+ * The AI apps WP Connection can be set up for, with per-app setup steps.
  *
  * Icons: drop an official SVG at assets/icons/<id>.svg (e.g. claude.svg) and it
  * replaces the generic icon. Use each vendor's brand-kit file and follow its
@@ -23,7 +23,7 @@ class WPC_Clients {
 				'kind'  => 'chat',
 				'auth'  => 'header',
 				'blurb' => 'Claude on the web, desktop and mobile apps.',
-				'intro' => 'Add WP Connections as a custom connector. It then shows up in every Claude chat.',
+				'intro' => 'Add WP Connection as a custom connector. It then shows up in every Claude chat.',
 				'steps' => array(
 					$token_step,
 					array( 'In Claude, open Settings → Connectors → Add custom connector.', null ),
@@ -40,7 +40,7 @@ class WPC_Clients {
 				'intro' => 'Add the server with one command.',
 				'steps' => array(
 					$token_step,
-					array( 'Run this in your project folder:', "claude mcp add --transport http wp-connections \\\n  {url} \\\n  --header \"x-api-key: <your token>\"" ),
+					array( 'Run this in your project folder:', "claude mcp add --transport http wp-connection \\\n  {url} \\\n  --header \"x-api-key: <your token>\"" ),
 					array( 'Click Test connection on the Overview tab.', null ),
 				),
 			),
@@ -66,7 +66,7 @@ class WPC_Clients {
 				'intro' => 'Add the server to your Cursor MCP config.',
 				'steps' => array(
 					$token_step,
-					array( 'Add this to ~/.cursor/mcp.json (or .cursor/mcp.json in a project):', "{\n  \"mcpServers\": {\n    \"wp-connections\": {\n      \"url\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
+					array( 'Add this to ~/.cursor/mcp.json (or .cursor/mcp.json in a project):', "{\n  \"mcpServers\": {\n    \"wp-connection\": {\n      \"url\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
 					array( 'Restart Cursor, then click Test connection on the Overview tab.', null ),
 				),
 			),
@@ -78,7 +78,7 @@ class WPC_Clients {
 				'intro' => 'Add the server to your workspace MCP config.',
 				'steps' => array(
 					$token_step,
-					array( 'Add this to .vscode/mcp.json:', "{\n  \"servers\": {\n    \"wp-connections\": {\n      \"type\": \"http\",\n      \"url\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
+					array( 'Add this to .vscode/mcp.json:', "{\n  \"servers\": {\n    \"wp-connection\": {\n      \"type\": \"http\",\n      \"url\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
 					array( 'Start the server from the MCP view, then click Test connection on the Overview tab.', null ),
 				),
 			),
@@ -90,7 +90,7 @@ class WPC_Clients {
 				'intro' => 'Add the server to your Gemini CLI settings.',
 				'steps' => array(
 					$token_step,
-					array( 'Add this to ~/.gemini/settings.json:', "{\n  \"mcpServers\": {\n    \"wp-connections\": {\n      \"httpUrl\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
+					array( 'Add this to ~/.gemini/settings.json:', "{\n  \"mcpServers\": {\n    \"wp-connection\": {\n      \"httpUrl\": \"{url}\",\n      \"headers\": { \"x-api-key\": \"<your token>\" }\n    }\n  }\n}" ),
 					array( 'Restart Gemini CLI, then click Test connection on the Overview tab.', null ),
 				),
 			),

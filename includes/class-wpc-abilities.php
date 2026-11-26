@@ -1,14 +1,14 @@
 <?php
 /**
- * Abilities exposed to AI apps as MCP tools at /wp-json/wp-connections/mcp.
+ * Abilities exposed to AI apps as MCP tools at /wp-json/wp-connection/mcp.
  */
 
 defined( 'ABSPATH' ) || exit;
 
 class WPC_Abilities {
 
-	const NS       = 'wp-connections';
-	const CATEGORY = 'wp-connections';
+	const NS       = 'wp-connection';
+	const CATEGORY = 'wp-connection';
 
 	/** Options the AI can never change. */
 	const PROTECTED_OPTIONS = array( 'siteurl', 'home', 'admin_email', 'new_admin_email', 'users_can_register', 'default_role', 'active_plugins', 'recovery_keys', 'cron', 'auth_key', 'secure_auth_key', 'logged_in_key', 'nonce_key', 'auth_salt', 'secure_auth_salt', 'logged_in_salt', 'nonce_salt' );
@@ -23,7 +23,7 @@ class WPC_Abilities {
 		wp_register_ability_category(
 			self::CATEGORY,
 			array(
-				'label'       => 'WP Connections',
+				'label'       => 'WP Connection',
 				'description' => 'Staging tools for building and migrating this site with an AI assistant.',
 			)
 		);
@@ -62,7 +62,7 @@ class WPC_Abilities {
 			'delete-file'      => array( 'Delete file', 'Delete a file (backed up first) or an empty folder in a writable folder.', array( 'root' => $root, 'path' => $str ), array( 'root', 'path' ), 'delete_file', false, true, array( 'delete_files' ) ),
 			'fetch-url'        => array( 'Fetch URL', 'GET a URL from the server as an anonymous visitor: status, headers and body. Allowed: this site and the hosts in settings.', array( 'url' => $str, 'max_bytes' => $int ), array( 'url' ), 'fetch_url', true, false, array( 'fetch_url' ) ),
 			'maintenance'      => array( 'Maintenance', 'flush_rewrite, flush_cache, elementor_css (regenerate) or all.', array( 'task' => array( 'type' => 'string', 'enum' => array( 'flush_rewrite', 'flush_cache', 'elementor_css', 'all' ) ) ), array( 'task' ), 'maintenance', false, false, array( 'maintenance' ) ),
-			'read-log'         => array( 'Read activity log', 'Latest WP Connections activity entries and the tail of wp-content/debug.log.', array( 'limit' => $int ), array(), 'read_log', true, false, array( 'read_logs' ) ),
+			'read-log'         => array( 'Read activity log', 'Latest WP Connection activity entries and the tail of wp-content/debug.log.', array( 'limit' => $int ), array(), 'read_log', true, false, array( 'read_logs' ) ),
 		);
 	}
 
@@ -126,10 +126,10 @@ class WPC_Abilities {
 		}
 		try {
 			$adapter->create_server(
-				'wp-connections',
+				'wp-connection',
 				self::NS,
 				'mcp',
-				'WP Connections',
+				'WP Connection',
 				'Staging tools for building and migrating this site with an AI assistant.',
 				WPC_VERSION,
 				array( \WP\MCP\Transport\HttpTransport::class ),
@@ -141,7 +141,7 @@ class WPC_Abilities {
 				array( __CLASS__, 'transport_permission' )
 			);
 		} catch ( \Throwable $e ) {
-			error_log( 'WP Connections: could not create MCP server: ' . $e->getMessage() ); // phpcs:ignore
+			error_log( 'WP Connection: could not create MCP server: ' . $e->getMessage() ); // phpcs:ignore
 		}
 	}
 
@@ -154,7 +154,7 @@ class WPC_Abilities {
 			return false;
 		}
 		if ( ! self::available( $name ) ) {
-			return new WP_Error( 'wpc_tool_off', 'This tool is switched off in WP Connections → Tools & permissions.' );
+			return new WP_Error( 'wpc_tool_off', 'This tool is switched off in WP Connection → Tools & permissions.' );
 		}
 		if ( ! $readonly && WPC_Auth::is_readonly() ) {
 			return new WP_Error( 'wpc_readonly_token', 'This token is read-only.' );
@@ -165,7 +165,7 @@ class WPC_Abilities {
 	/** Wrapper: guard, run, log. */
 	public static function run( $name, $method, $input, $readonly ) {
 		if ( WPC_Guard::is_blocked() ) {
-			return new WP_Error( 'wpc_blocked', 'WP Connections is disabled on this domain.' );
+			return new WP_Error( 'wpc_blocked', 'WP Connection is disabled on this domain.' );
 		}
 		try {
 			$result = call_user_func( array( __CLASS__, 'do_' . $method ), $input );
@@ -224,7 +224,7 @@ class WPC_Abilities {
 				'php'       => PHP_VERSION,
 				'mysql'     => $wpdb->db_server_info(),
 				'server'    => isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '',
-				'wp_connections' => WPC_VERSION,
+				'wp_connection' => WPC_VERSION,
 				'mcp_adapter'    => defined( 'WP_MCP_VERSION' ) ? WP_MCP_VERSION : null,
 			),
 			'limits'      => array(
@@ -275,7 +275,7 @@ class WPC_Abilities {
 		WP_Filesystem();
 		if ( ! empty( $in['zip_url'] ) ) {
 			if ( ! WPC_Settings::tool_on( 'install_zip' ) ) {
-				return new WP_Error( 'wpc_tool_off', 'Installing from a zip URL is switched off in WP Connections.' );
+				return new WP_Error( 'wpc_tool_off', 'Installing from a zip URL is switched off in WP Connection.' );
 			}
 			$pkg = esc_url_raw( $in['zip_url'] );
 			if ( 0 !== strpos( $pkg, 'https://' ) ) {
@@ -283,7 +283,7 @@ class WPC_Abilities {
 			}
 		} elseif ( ! empty( $in['slug'] ) ) {
 			if ( ! WPC_Settings::tool_on( 'install_wporg' ) ) {
-				return new WP_Error( 'wpc_tool_off', 'Installing from wordpress.org is switched off in WP Connections.' );
+				return new WP_Error( 'wpc_tool_off', 'Installing from wordpress.org is switched off in WP Connection.' );
 			}
 			$api = plugins_api( 'plugin_information', array( 'slug' => sanitize_key( $in['slug'] ), 'fields' => array( 'sections' => false ) ) );
 			if ( is_wp_error( $api ) ) {
@@ -319,10 +319,10 @@ class WPC_Abilities {
 		self::admin_includes();
 		$file = $in['plugin'];
 		if ( plugin_basename( WPC_FILE ) === $file && 'activate' !== $in['action'] ) {
-			return new WP_Error( 'wpc_self', 'WP Connections cannot deactivate itself; do that in wp-admin.' );
+			return new WP_Error( 'wpc_self', 'WP Connection cannot deactivate itself; do that in wp-admin.' );
 		}
 		if ( 'delete' === $in['action'] && ! WPC_Settings::tool_on( 'delete_plugins' ) ) {
-			return new WP_Error( 'wpc_tool_off', 'Deleting plugins is switched off in WP Connections.' );
+			return new WP_Error( 'wpc_tool_off', 'Deleting plugins is switched off in WP Connection.' );
 		}
 		if ( 0 === strpos( $file, 'mcp-adapter/' ) && 'activate' !== $in['action'] ) {
 			return new WP_Error( 'wpc_self', 'The MCP Adapter is needed for this connection; change it in wp-admin.' );
@@ -542,7 +542,7 @@ class WPC_Abilities {
 			return new WP_Error( 'wpc_not_found', 'Post not found.' );
 		}
 		if ( ! empty( $in['force'] ) && ! WPC_Settings::tool_on( 'delete_posts' ) ) {
-			return new WP_Error( 'wpc_tool_off', 'Permanent delete is switched off in WP Connections; the post can only be trashed.' );
+			return new WP_Error( 'wpc_tool_off', 'Permanent delete is switched off in WP Connection; the post can only be trashed.' );
 		}
 		$r = ! empty( $in['force'] ) ? wp_delete_post( $id, true ) : wp_trash_post( $id );
 		return $r ? array( 'id' => $id, 'deleted' => ! empty( $in['force'] ), 'trashed' => empty( $in['force'] ) ) : new WP_Error( 'wpc_trash', 'Could not trash post.' );

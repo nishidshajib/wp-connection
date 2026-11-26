@@ -1,7 +1,7 @@
 <?php
 /**
  * Runs when the plugin is deleted from the Plugins screen.
- * Removes only WP Connections' own tables and settings.
+ * Removes only WP Connection' own tables and settings.
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
