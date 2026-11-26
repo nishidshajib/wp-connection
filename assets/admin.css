@@ -79,7 +79,9 @@
 .wpc-pick:has(input:focus-visible){outline:2px solid var(--wpc-brand);outline-offset:2px}
 .wpc-pick strong{font-size:15px}
 .wpc-ico{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--wpc-tint);color:var(--wpc-brand)}
-.wpc-ico img{display:block;width:22px;height:22px}
+.wpc-ico img{display:block;width:24px;height:24px;object-fit:contain}
+.wpc-ico:has(img.wpc-brand){background:#fff;border:1px solid #dcdcde;box-sizing:border-box}
+.wpc-brand-invert{filter:invert(1)}
 .wpc-next [hidden]{display:none}
 .wpc-checks{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;margin:0 0 20px}
 .wpc-welcome .button-link{margin-top:12px;color:var(--wpc-brand)}

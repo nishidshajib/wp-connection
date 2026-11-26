@@ -17,6 +17,7 @@ rsync -a --exclude dist --exclude bin --exclude '.git*' --exclude '.DS_Store' --
 ( cd "$TMP" && zip -qr "$TMP/github.zip" wp-connection )
 cp "$TMP/github.zip" dist/wp-connection.zip
 rm "$TMP/wp-connection/includes/class-wpc-updater.php"
+rm -f "$TMP/wp-connection/assets/icons/"*.svg  # Brand logos are not GPL: keep them out of the WordPress.org build.
 ( cd "$TMP" && zip -qr "$TMP/wporg.zip" wp-connection )
 cp "$TMP/wporg.zip" dist/wp-connection-wordpressorg.zip
 rm -rf "$TMP"

@@ -130,11 +130,28 @@ class WPC_Clients {
 		return array( 'header' => 'API key header', 'oauth' => 'OAuth sign-in', 'either' => 'API key or OAuth' )[ $auth ] ?? '';
 	}
 
-	/** Official icon from assets/icons/<id>.svg if present, else a generic outline icon. */
+	/** File names accepted for each app's icon in assets/icons/ (first match wins). */
+	const ICON_FILES = array(
+		'claude'      => array( 'claude' ),
+		'claude-code' => array( 'claude-code' ),
+		'chatgpt'     => array( 'chatgpt', 'openai-chatgpt', 'openai' ),
+		'cursor'      => array( 'cursor' ),
+		'vscode'      => array( 'vscode', 'visual-studio-code' ),
+		'gemini'      => array( 'gemini-cli', 'gemini' ),
+		'other'       => array( 'other', 'model-context-protocol', 'mcp' ),
+	);
+
+	/** Official icon from assets/icons/ if present, else a generic outline icon. */
 	public static function icon( $id, $kind ) {
-		$file = WPC_DIR . '/assets/icons/' . sanitize_file_name( $id ) . '.svg';
-		if ( is_readable( $file ) ) {
-			return '<img src="' . esc_url( WPC_URL . 'assets/icons/' . sanitize_file_name( $id ) . '.svg' ) . '" alt="" width="22" height="22">';
+		foreach ( self::ICON_FILES[ $id ] ?? array( $id ) as $name ) {
+			$file = WPC_DIR . '/assets/icons/' . sanitize_file_name( $name ) . '.svg';
+			if ( ! is_readable( $file ) ) {
+				continue;
+			}
+			// A white-only mark (e.g. fill="#ffffff") would vanish on the light tile: show it dark.
+			$head  = (string) file_get_contents( $file, false, null, 0, 400 ); // phpcs:ignore
+			$white = (bool) preg_match( '/<svg[^>]*\sfill="#(?:fff|ffffff)"/i', $head );
+			return '<img class="wpc-brand' . ( $white ? ' wpc-brand-invert' : '' ) . '" src="' . esc_url( WPC_URL . 'assets/icons/' . sanitize_file_name( $name ) . '.svg' ) . '?v=' . (int) filemtime( $file ) . '" alt="" width="24" height="24">';
 		}
 		$paths = array(
 			'chat'   => '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
