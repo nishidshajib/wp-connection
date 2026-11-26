@@ -35,6 +35,9 @@ Learn more at [wp-connection.com](https://wp-connection.com). Made by [Nishid Sh
 
 == Frequently Asked Questions ==
 
+= I have the older WP Connections plugin. How do I upgrade? =
+Upload and activate WP Connection. It switches over by itself and keeps your settings, tokens and activity log, then offers to remove the old files. Don't use Delete on the Plugins page for the old copy: its uninstaller erases that data.
+
 = Which AI apps work? =
 Any MCP client that supports remote (Streamable HTTP) servers. Apps that let you add a request header use an API key; apps that only offer sign-in use OAuth (switch it on under Access → Sign-in methods).
 
@@ -52,6 +55,7 @@ Deactivate → choose "Deactivate temporarily" (keeps everything) or "Deactivate
 == Changelog ==
 
 = 1.1.0 =
+* Replaces the older WP Connections plugin in one click and keeps its settings, tokens and activity log.
 * Renamed to WP Connection (slug wp-connection). The MCP URL is now /wp-json/wp-connection/mcp.
 * New Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).
 * OAuth sign-in for apps that can't send a custom header. Bearer tokens accepted.

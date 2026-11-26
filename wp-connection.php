@@ -16,6 +16,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/*
+ * Replacing the older "WP Connections" plugin: both share class names, so while the
+ * old copy is active this one stays dormant and only offers to replace it.
+ */
+require_once __DIR__ . '/includes/class-wpc-migrate.php';
+if ( class_exists( 'WPC_Settings', false ) || WPC_Migrate::old_active() ) {
+	WPC_Migrate::init( __FILE__, true );
+	return;
+}
+WPC_Migrate::init( __FILE__, false );
+
 define( 'WPC_VERSION', '1.1.0' );
 define( 'WPC_DB_VERSION', '1' );
 define( 'WPC_FILE', __FILE__ );
