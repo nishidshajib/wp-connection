@@ -171,7 +171,7 @@ class WPC_Auth {
 			self::$current = $t + array( 'id' => $id );
 			return (int) $user->ID;
 		}
-		self::fail( 'Unknown or revoked token (key starting ' . substr( $key, 0, 8 ) . '…).' );
+		self::fail( 'Unknown or revoked token (key starting ' . substr( $key, 0, 8 ) . '...).' );
 		return $user_id;
 	}
 
