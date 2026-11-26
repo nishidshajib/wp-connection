@@ -31,6 +31,7 @@ Pick your app on the Welcome screen and WP Connection shows the exact steps and 
 - **Staging protection.** `X-Robots-Tag: noindex`, a blocking `robots.txt`, "Discourage search engines" locked on, and outgoing email redirected to a test address.
 - **Production guard.** List your live domains and the plugin refuses to work there, even if it's copied over by mistake.
 - **Self-protection.** The AI can't deactivate WP Connection or the MCP Adapter, manage users, or change protected settings (site URL, admin email, roles, security keys and more).
+- **SEO tools** for Yoast SEO, Rank Math and All in One SEO: one set of fields (title, description, focus keyword, canonical, noindex, nofollow, social title/description/image) for posts, pages, categories and tags.
 - **Activity log** with filters, CSV export and restore.
 - **Updates.** GitHub builds update from this repository's releases (with a checksum check when GitHub provides one). WordPress.org builds update through WordPress.org.
 - **Clean removal.** Deactivate temporarily, or remove only this plugin's own tables and settings. Nothing else is touched.
@@ -147,7 +148,6 @@ Sites running the GitHub build see the update within 12 hours (or right away wit
 
 ## Roadmap
 
-- SEO tools for Yoast SEO, Rank Math and All in One SEO with one set of fields (title, description, focus keyword, canonical, noindex)
 - Refresh tokens for OAuth
 - WordPress.org listing
 

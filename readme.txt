@@ -4,7 +4,7 @@ Tags: mcp, ai, staging, connector, abilities
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,11 @@ Transients: wpc_*
 Deactivate → choose "Deactivate temporarily" (keeps everything) or "Deactivate and delete this plugin's tables" (removes only the items above). Deleting the plugin also removes only the items above. Nothing belonging to other plugins or WordPress core is touched.
 
 == Changelog ==
+
+= 1.2.0 =
+* New SEO tools (get-seo, update-seo) for Yoast SEO, Rank Math and All in One SEO with one set of fields: title, description, focus keyword, canonical, noindex, nofollow and social title/description/image. Posts, pages, categories and tags (terms: Yoast and Rank Math).
+* Yoast SEO fields written through upsert-post now show on the site straight away.
+* Admin pages are centred on wide screens; style changes no longer stick in the browser cache.
 
 = 1.1.0 =
 * One-click "Install & activate MCP Adapter" dialog. WP Connection no longer refuses to activate when the MCP Adapter is missing.

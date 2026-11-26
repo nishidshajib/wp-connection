@@ -52,6 +52,8 @@ class WPC_Abilities {
 			'get-post'         => array( 'Get post', 'Get one post by id or path with raw content, terms and optionally meta (meta_keys limits which keys).', array( 'id' => $int, 'path' => $str, 'post_type' => $str, 'include_meta' => $bool, 'meta_keys' => array( 'type' => 'array', 'items' => $str ) ), array(), 'get_post', true, false, array( 'read_posts' ) ),
 			'upsert-post'      => array( 'Create or update post', 'Create (no id) or update (id) a post or page: title, slug, status, parent, menu_order, template, date, raw content, excerpt, meta object (null deletes a key) and terms (taxonomy => slugs).', array( 'id' => $int, 'post_type' => $str, 'title' => $str, 'slug' => $str, 'status' => $str, 'content' => $str, 'excerpt' => $str, 'parent' => $int, 'menu_order' => $int, 'template' => $str, 'date' => $str, 'author' => $int, 'comment_status' => $str, 'meta' => $obj, 'terms' => $obj ), array(), 'upsert_post', false, false, array( 'write_posts' ) ),
 			'trash-post'       => array( 'Trash post', 'Move a post to the trash. force=true deletes permanently (only if that tool is switched on).', array( 'id' => $int, 'force' => $bool ), array( 'id' ), 'trash_post', false, true, array( 'trash_posts', 'delete_posts' ) ),
+			'get-seo'          => array( 'Get SEO fields', 'Read SEO fields of a post/page (id) or a category/tag (taxonomy + term slug or term_id) from the active SEO plugin: Yoast SEO, Rank Math or All in One SEO. Without id/term it lists the active SEO plugins. Fields: title, description, focus_keyword, canonical, noindex (true/false/null = default), nofollow, og_title, og_description, og_image.', array( 'id' => $int, 'taxonomy' => $str, 'term' => $str, 'term_id' => $int, 'plugin' => array( 'type' => 'string', 'enum' => array( 'yoast', 'rankmath', 'aioseo' ) ) ), array(), 'get_seo', true, false, array( 'read_posts' ) ),
+			'update-seo'       => array( 'Update SEO fields', 'Set SEO fields for a post/page (id) or a category/tag (taxonomy + term or term_id) in the active SEO plugin (Yoast SEO, Rank Math or All in One SEO). Send only the fields to change in "fields". Empty string clears a field; noindex null = plugin default. Use this instead of writing SEO meta keys yourself: it also refreshes Yoast\'s cached data and writes All in One SEO\'s own table.', array( 'id' => $int, 'taxonomy' => $str, 'term' => $str, 'term_id' => $int, 'plugin' => array( 'type' => 'string', 'enum' => array( 'yoast', 'rankmath', 'aioseo' ) ), 'fields' => array( 'type' => 'object', 'properties' => array( 'title' => $str, 'description' => $str, 'focus_keyword' => $str, 'canonical' => $str, 'noindex' => array( 'type' => array( 'boolean', 'null' ) ), 'nofollow' => $bool, 'og_title' => $str, 'og_description' => $str, 'og_image' => $str ), 'additionalProperties' => false ) ), array( 'fields' ), 'update_seo', false, false, array( 'seo' ) ),
 			'upsert-term'      => array( 'Create or update term', 'Create or update a category, tag or other term by slug.', array( 'taxonomy' => $str, 'name' => $str, 'slug' => $str, 'description' => $str, 'parent' => $int, 'meta' => $obj ), array( 'taxonomy', 'slug' ), 'upsert_term', false, false, array( 'terms' ) ),
 			'import-media'     => array( 'Import media from URL', 'Copy a file from an allowed host into the media library, keeping its file name and /uploads/YYYY/MM/ folder. Skips files already imported from the same URL.', array( 'url' => $str, 'year_month' => $str, 'title' => $str, 'alt' => $str, 'caption' => $str, 'description' => $str, 'parent' => $int, 'date' => $str ), array( 'url' ), 'import_media', false, false, array( 'import_media' ) ),
 			'list-files'       => array( 'List files', 'List files in an allowed folder.', array( 'root' => $root, 'path' => $str, 'recursive' => $bool ), array( 'root' ), 'list_files', true, false, array( 'read_files' ) ),
@@ -522,6 +524,10 @@ class WPC_Abilities {
 					update_post_meta( $id, $k, wp_slash( $v ) );
 				}
 			}
+			// Yoast builds its front-end data on save_post, which ran before this meta was written.
+			if ( array_filter( array_keys( $in['meta'] ), array( 'WPC_SEO', 'is_yoast_key' ) ) ) {
+				WPC_SEO::resave( $id );
+			}
 		}
 		if ( ! empty( $in['terms'] ) && is_array( $in['terms'] ) ) {
 			foreach ( $in['terms'] as $tax => $terms ) {
@@ -741,5 +747,64 @@ class WPC_Abilities {
 			$out['debug_size'] = $size;
 		}
 		return $out;
+	}
+
+	/* ---------------------------------------------------------------- SEO */
+
+	private static function seo_target( $in ) {
+		if ( ! empty( $in['id'] ) ) {
+			$p = get_post( (int) $in['id'] );
+			return $p ? array( 'post', $p ) : new WP_Error( 'wpc_not_found', 'Post not found.' );
+		}
+		if ( ! empty( $in['term_id'] ) || ( ! empty( $in['taxonomy'] ) && ! empty( $in['term'] ) ) ) {
+			$t = ! empty( $in['term_id'] ) ? get_term( (int) $in['term_id'] ) : get_term_by( 'slug', $in['term'], $in['taxonomy'] );
+			return $t && ! is_wp_error( $t ) ? array( 'term', $t ) : new WP_Error( 'wpc_not_found', 'Term not found.' );
+		}
+		return null;
+	}
+
+	public static function do_get_seo( $in ) {
+		$active = WPC_SEO::active();
+		$target = self::seo_target( $in );
+		if ( null === $target ) {
+			return array( 'active_seo_plugins' => $active, 'fields' => WPC_SEO::FIELDS );
+		}
+		if ( is_wp_error( $target ) ) {
+			return $target;
+		}
+		$plugin = WPC_SEO::pick( $in['plugin'] ?? '' );
+		if ( is_wp_error( $plugin ) ) {
+			return $plugin;
+		}
+		$fields = 'post' === $target[0] ? WPC_SEO::get_post( $target[1]->ID, $plugin ) : WPC_SEO::get_term( $target[1], $plugin );
+		if ( is_wp_error( $fields ) ) {
+			return $fields;
+		}
+		return array( 'plugin' => $plugin, 'active_seo_plugins' => $active, 'object' => 'post' === $target[0] ? array( 'type' => 'post', 'id' => $target[1]->ID, 'title' => $target[1]->post_title ) : array( 'type' => 'term', 'id' => $target[1]->term_id, 'taxonomy' => $target[1]->taxonomy, 'name' => $target[1]->name ), 'fields' => $fields );
+	}
+
+	public static function do_update_seo( $in ) {
+		$target = self::seo_target( $in );
+		if ( null === $target ) {
+			return new WP_Error( 'wpc_input', 'Give id (post/page) or taxonomy + term (or term_id).' );
+		}
+		if ( is_wp_error( $target ) ) {
+			return $target;
+		}
+		$plugin = WPC_SEO::pick( $in['plugin'] ?? '' );
+		if ( is_wp_error( $plugin ) ) {
+			return $plugin;
+		}
+		$fields = array_intersect_key( (array) ( $in['fields'] ?? array() ), array_flip( WPC_SEO::FIELDS ) );
+		if ( ! $fields ) {
+			return new WP_Error( 'wpc_input', 'fields is empty. Allowed: ' . implode( ', ', WPC_SEO::FIELDS ) );
+		}
+		$r = 'post' === $target[0] ? WPC_SEO::update_post( $target[1]->ID, $plugin, $fields ) : WPC_SEO::update_term( $target[1], $plugin, $fields );
+		if ( is_wp_error( $r ) ) {
+			return $r;
+		}
+		$in2 = $in;
+		unset( $in2['fields'] );
+		return array( 'saved' => array_keys( $fields ) ) + self::do_get_seo( $in2 + array( 'plugin' => $plugin ) );
 	}
 }

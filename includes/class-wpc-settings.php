@@ -27,6 +27,7 @@ class WPC_Settings {
 			'trash_posts'    => array( 'Move to trash', 'Recoverable from Trash.', 'write', 'content', true ),
 			'delete_posts'   => array( 'Delete permanently', 'Cannot be undone.', 'destructive', 'content', false ),
 			'terms'          => array( 'Categories and tags', 'Create and edit terms.', 'write', 'content', true ),
+			'seo'            => array( 'SEO fields', 'Edit SEO title, description, focus keyword, canonical, noindex and social fields in Yoast SEO, Rank Math or All in One SEO.', 'write', 'content', true ),
 			'import_media'   => array( 'Import media from URL', 'Copy images from allowed hosts into the media library.', 'write', 'content', true ),
 			'read_files'     => array( 'List and read files', 'Inspect theme and plugin code.', 'read', 'files', true ),
 			'write_files'    => array( 'Write files', 'Create, overwrite or restore files in writable folders.', 'write', 'files', true ),

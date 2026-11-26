@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+- New SEO tools (`get-seo`, `update-seo`) for Yoast SEO, Rank Math and All in One SEO with one set of fields: title, description, focus keyword, canonical, noindex, nofollow and social title/description/image. Posts, pages, categories and tags (terms: Yoast and Rank Math).
+- Yoast SEO fields written through `upsert-post` now show on the site straight away.
+- Admin pages are centred on wide screens; style changes no longer stick in the browser cache.
+
 ## 1.1.0
 - One-click "Install & activate MCP Adapter" dialog. WP Connection no longer refuses to activate when the MCP Adapter is missing.
 - Replaces the older WP Connections plugin in one click and keeps its settings, tokens and activity log.

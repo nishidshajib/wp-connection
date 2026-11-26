@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WP Connection
  * Description:       Connects a staging WordPress site to AI assistants (Claude, ChatGPT, Cursor, VS Code and any MCP client) through the WordPress MCP Adapter, with API-key or OAuth access, per-tool permissions, sandboxed file access, staging protection and an activity log. Refuses to run on blocked (production) domains.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 6.9
  * Requires PHP:      8.0
  * Author:            Nishid Shajib
@@ -26,7 +26,7 @@ if ( class_exists( 'WPC_Settings', false ) || WPC_Migrate::old_active() ) {
 }
 WPC_Migrate::init( __FILE__, false );
 
-define( 'WPC_VERSION', '1.1.0' );
+define( 'WPC_VERSION', '1.2.0' );
 define( 'WPC_DB_VERSION', '1' );
 define( 'WPC_FILE', __FILE__ );
 define( 'WPC_DIR', __DIR__ );
@@ -42,6 +42,7 @@ require_once WPC_DIR . '/includes/class-wpc-guard.php';
 require_once WPC_DIR . '/includes/class-wpc-auth.php';
 require_once WPC_DIR . '/includes/class-wpc-log.php';
 require_once WPC_DIR . '/includes/class-wpc-files.php';
+require_once WPC_DIR . '/includes/class-wpc-seo.php';
 require_once WPC_DIR . '/includes/class-wpc-abilities.php';
 require_once WPC_DIR . '/includes/class-wpc-clients.php';
 require_once WPC_DIR . '/includes/class-wpc-dependency.php';
