@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+- Refused connections now say why (no key sent, unknown token, expired, wrong domain, IP not allowed…) in the app's error, the activity log and on the Overview tab.
+- Unauthenticated MCP requests get a standard 401 with a `WWW-Authenticate` header, so AI apps can tell sign-in is needed instead of reporting the server as unreachable.
+
 ## 1.2.0
 - New SEO tools (`get-seo`, `update-seo`) for Yoast SEO, Rank Math and All in One SEO with one set of fields: title, description, focus keyword, canonical, noindex, nofollow and social title/description/image. Posts, pages, categories and tags (terms: Yoast and Rank Math).
 - Yoast SEO fields written through `upsert-post` now show on the site straight away.

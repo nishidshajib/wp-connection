@@ -23,6 +23,41 @@ class WPC_Auth {
 	public static function init() {
 		add_filter( 'determine_current_user', array( __CLASS__, 'determine_user' ), 30 );
 		add_filter( 'rest_authentication_errors', array( __CLASS__, 'restrict_routes' ), 99 );
+		add_filter( 'rest_post_dispatch', array( __CLASS__, 'explain_401' ), 10, 3 );
+	}
+
+	/** Why the current MCP request was refused (shown to the app and in the activity log). */
+	private static $fail = null;
+
+	private static function fail( $reason, $who = '' ) {
+		if ( null !== self::$fail ) {
+			return;
+		}
+		self::$fail = $reason;
+		$key = 'wpc_authfail_' . md5( $reason . $who );
+		if ( ! get_transient( $key ) && class_exists( 'WPC_Log' ) ) {
+			set_transient( $key, 1, MINUTE_IN_SECONDS ); // At most one log line per reason per minute.
+			WPC_Log::add( 'auth-refused', $who ? $who : self::client_ip(), false, $reason );
+		}
+	}
+
+	public static function last_failure() {
+		return self::$fail;
+	}
+
+	/** Turn the adapter's bare 401/403 into a clear, standard answer the AI app can act on. */
+	public static function explain_401( $response, $server, $request ) {
+		if ( ! self::is_mcp_request() || self::is_token_request() || ! $response instanceof WP_HTTP_Response ) {
+			return $response;
+		}
+		if ( ! in_array( (int) $response->get_status(), array( 401, 403 ), true ) ) {
+			return $response;
+		}
+		$why = self::$fail ? self::$fail : 'No API key sent.';
+		$response->set_status( 401 );
+		$response->header( 'WWW-Authenticate', 'Bearer realm="WP Connection", error="invalid_token", error_description="' . str_replace( '"', "'", $why ) . '"' );
+		$response->set_data( array( 'code' => 'wpc_unauthorized', 'message' => $why . ' Send a token from Tools → WP Connection → Access as the x-api-key header (or Authorization: Bearer).', 'data' => array( 'status' => 401 ) ) );
+		return $response;
 	}
 
 	public static function tokens() {
@@ -96,7 +131,12 @@ class WPC_Auth {
 			return $user_id;
 		}
 		$key = self::request_key();
-		if ( '' === $key || ! self::ip_allowed() ) {
+		if ( '' === $key ) {
+			self::fail( 'No API key sent (expected an x-api-key header or Authorization: Bearer).' );
+			return $user_id;
+		}
+		if ( ! self::ip_allowed() ) {
+			self::fail( 'IP address ' . self::client_ip() . ' is not in the IP allowlist.' );
 			return $user_id;
 		}
 		$hash   = hash( 'sha256', $key );
@@ -106,19 +146,24 @@ class WPC_Auth {
 				continue;
 			}
 			if ( WPC_Settings::get( 'bind_domain' ) && ( $t['host'] ?? '' ) !== WPC_Guard::host() ) {
+				self::fail( 'Token was created on ' . ( $t['host'] ?? '?' ) . ', not ' . WPC_Guard::host() . '.', $t['name'] );
 				return $user_id;
 			}
 			if ( ! empty( $t['expires'] ) && time() > (int) $t['expires'] ) {
+				self::fail( 'Token has expired.', $t['name'] );
 				return $user_id;
 			}
 			if ( ! empty( $t['oauth'] ) && ( ! class_exists( 'WPC_OAuth' ) || ! WPC_OAuth::enabled() ) ) {
-				return $user_id; // OAuth-issued tokens stop working when OAuth sign-in is switched off.
+				self::fail( 'OAuth sign-in is switched off, so tokens from it are paused.', $t['name'] );
+				return $user_id;
 			}
 			$user = get_userdata( (int) $t['user_id'] );
 			if ( ! $user || ! user_can( $user, 'manage_options' ) ) {
+				self::fail( 'The token\'s user is missing or no longer an administrator.', $t['name'] );
 				return $user_id;
 			}
 			if ( ! self::rate_ok( $id ) ) {
+				self::fail( 'Rate limit reached for this token.', $t['name'] );
 				return $user_id;
 			}
 			$tokens[ $id ]['last_used'] = time();
@@ -126,6 +171,7 @@ class WPC_Auth {
 			self::$current = $t + array( 'id' => $id );
 			return (int) $user->ID;
 		}
+		self::fail( 'Unknown or revoked token (key starting ' . substr( $key, 0, 8 ) . '…).' );
 		return $user_id;
 	}
 

@@ -405,6 +405,12 @@ class WPC_Admin {
 					<div><span class="wpc-big"><?php echo (int) $stats['errors']; ?></span><span class="wpc-muted">Errors</span></div>
 				</div>
 				<span class="wpc-muted">Last request: <?php echo $stats['last'] ? esc_html( get_date_from_gmt( $stats['last'], 'Y-m-d H:i' ) ) : 'none yet'; ?></span>
+				<?php
+				$refused = WPC_Log::query( array( 'tool' => 'auth-refused', 'limit' => 1 ) );
+				if ( $refused ) {
+					echo '<div class="notice notice-warning inline" style="margin:0"><p><strong>Last refused connection</strong> (' . esc_html( get_date_from_gmt( $refused[0]['created'], 'Y-m-d H:i' ) ) . '): ' . esc_html( $refused[0]['message'] ) . '</p></div>';
+				}
+				?>
 				<a href="<?php echo esc_url( self::url( 'log' ) ); ?>">Open activity log</a>
 			</section>
 		</div>

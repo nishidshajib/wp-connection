@@ -4,7 +4,7 @@ Tags: mcp, ai, staging, connector, abilities
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Transients: wpc_*
 Deactivate → choose "Deactivate temporarily" (keeps everything) or "Deactivate and delete this plugin's tables" (removes only the items above). Deleting the plugin also removes only the items above. Nothing belonging to other plugins or WordPress core is touched.
 
 == Changelog ==
+
+= 1.2.1 =
+* Refused connections now say why (no key sent, unknown token, expired, wrong domain, IP not allowed…) in the app's error, the activity log and on the Overview tab.
+* Unauthenticated MCP requests get a standard 401 with a WWW-Authenticate header, so AI apps can tell sign-in is needed instead of reporting the server as unreachable.
 
 = 1.2.0 =
 * New SEO tools (get-seo, update-seo) for Yoast SEO, Rank Math and All in One SEO with one set of fields: title, description, focus keyword, canonical, noindex, nofollow and social title/description/image. Posts, pages, categories and tags (terms: Yoast and Rank Math).
