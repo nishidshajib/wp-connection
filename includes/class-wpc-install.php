@@ -36,6 +36,9 @@ class WPC_Install {
 		if ( ! wp_next_scheduled( self::CRON ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CRON );
 		}
+		if ( ! class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
+			set_transient( 'wpc_adapter_dialog', 1, HOUR_IN_SECONDS ); // Offer the one-click MCP Adapter install.
+		}
 	}
 
 	/** Temporary deactivation: keep all data; just stop the scheduled task. */

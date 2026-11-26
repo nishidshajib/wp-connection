@@ -41,6 +41,9 @@ class WPC_Migrate {
 		if ( plugin_basename( self::$file ) === $plugin && self::old_active() ) {
 			deactivate_plugins( self::OLD, true ); // Silent: keeps all data.
 			set_transient( 'wpc_replaced_notice', 1, HOUR_IN_SECONDS );
+			if ( ! class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
+				set_transient( 'wpc_adapter_dialog', 1, HOUR_IN_SECONDS );
+			}
 		}
 	}
 

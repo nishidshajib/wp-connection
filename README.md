@@ -46,7 +46,7 @@ Pick your app on the Welcome screen and WP Connection shows the exact steps and 
 ## Install
 
 1. Download `wp-connection.zip` from the [latest release](../../releases/latest).
-2. In WordPress: Plugins → Add New → Upload Plugin, then activate. Install and activate the MCP Adapter too.
+2. In WordPress: Plugins → Add New → Upload Plugin, then activate. If the MCP Adapter isn't active yet, a dialog offers to install and activate it in one click.
 3. Go to **Tools → WP Connection**, pick your AI app and follow the steps.
 4. Click **Test connection**.
 

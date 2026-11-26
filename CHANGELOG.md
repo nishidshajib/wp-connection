@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.1.0
+- One-click "Install & activate MCP Adapter" dialog. WP Connection no longer refuses to activate when the MCP Adapter is missing.
 - Replaces the older WP Connections plugin in one click and keeps its settings, tokens and activity log.
 - Renamed to WP Connection (slug `wp-connection`, site wp-connection.com). The MCP URL is now `/wp-json/wp-connection/mcp`.
 - Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).

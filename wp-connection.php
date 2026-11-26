@@ -5,7 +5,6 @@
  * Version:           1.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.0
- * Requires Plugins:  mcp-adapter
  * Author:            Nishid Shajib
  * Plugin URI:        https://wp-connection.com
  * Author URI:        https://nishidshajib.com
@@ -45,6 +44,7 @@ require_once WPC_DIR . '/includes/class-wpc-log.php';
 require_once WPC_DIR . '/includes/class-wpc-files.php';
 require_once WPC_DIR . '/includes/class-wpc-abilities.php';
 require_once WPC_DIR . '/includes/class-wpc-clients.php';
+require_once WPC_DIR . '/includes/class-wpc-dependency.php';
 require_once WPC_DIR . '/includes/class-wpc-oauth.php';
 if ( ! WPC_WPORG_BUILD ) {
 	require_once WPC_DIR . '/includes/class-wpc-updater.php';
@@ -61,6 +61,7 @@ WPC_Auth::init();
 WPC_Log::init();
 WPC_Abilities::init();
 WPC_OAuth::init();
+WPC_Dependency::init();
 if ( ! WPC_WPORG_BUILD ) {
 	WPC_Updater::init();
 }

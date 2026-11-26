@@ -4,7 +4,6 @@ Tags: mcp, ai, staging, connector, abilities
 Requires at least: 6.9
 Tested up to: 6.9
 Requires PHP: 8.0
-Requires Plugins: mcp-adapter
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +28,7 @@ Learn more at [wp-connection.com](https://wp-connection.com). Made by [Nishid Sh
 
 == Installation ==
 
-1. Install and activate the MCP Adapter plugin, then WP Connection.
+1. Install and activate WP Connection. If the MCP Adapter plugin isn't active yet, a dialog offers to install and activate it in one click.
 2. Go to Tools → WP Connection and pick your AI app on the Welcome screen.
 3. Follow the steps shown for that app, then click Test connection.
 
@@ -55,6 +54,7 @@ Deactivate → choose "Deactivate temporarily" (keeps everything) or "Deactivate
 == Changelog ==
 
 = 1.1.0 =
+* One-click "Install & activate MCP Adapter" dialog. WP Connection no longer refuses to activate when the MCP Adapter is missing.
 * Replaces the older WP Connections plugin in one click and keeps its settings, tokens and activity log.
 * Renamed to WP Connection (slug wp-connection). The MCP URL is now /wp-json/wp-connection/mcp.
 * New Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).

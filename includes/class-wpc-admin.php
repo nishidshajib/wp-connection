@@ -60,8 +60,6 @@ class WPC_Admin {
 			echo '<div class="notice notice-error"><p><strong>WP Connection is disabled on this domain</strong> (it is in the blocked list). Deactivate and delete the plugin here.</p></div>';
 		} elseif ( ! function_exists( 'wp_register_ability' ) ) {
 			echo '<div class="notice notice-error"><p><strong>WP Connection</strong> needs WordPress 6.9 or newer.</p></div>';
-		} elseif ( ! class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
-			echo '<div class="notice notice-warning"><p><strong>WP Connection</strong> needs the <strong>MCP Adapter</strong> plugin to be active.</p></div>';
 		}
 	}
 
