@@ -1,5 +1,5 @@
 === WP Connections ===
-Contributors: nishidshajib
+Contributors: nishid
 Tags: mcp, ai, staging, connector, abilities
 Requires at least: 6.9
 Tested up to: 6.9
