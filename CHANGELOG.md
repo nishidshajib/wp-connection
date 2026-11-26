@@ -1,0 +1,11 @@
+# Changelog
+
+## 1.1.0
+- Welcome screen to choose your AI app, with per-app setup steps (Claude, Claude Code, ChatGPT, Cursor, VS Code, Gemini CLI, other MCP apps).
+- OAuth 2.1 sign-in (PKCE) for apps that can't send a custom header. `Authorization: Bearer` tokens accepted.
+- Updates tab. GitHub builds update from GitHub releases; WordPress.org builds update through WordPress.org.
+- Neutral wording and generic defaults (no site-specific folders or domains).
+- New brand colour (#3E00C7).
+
+## 1.0.0
+- First release.
